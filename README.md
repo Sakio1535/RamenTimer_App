@@ -8,7 +8,7 @@
 
 <br>
 
-## こだわったところ
+## 特徴
 
 <img width="240" src="https://user-images.githubusercontent.com/45383028/73138600-d544e680-40a7-11ea-9480-34fca8a45604.gif">
 
