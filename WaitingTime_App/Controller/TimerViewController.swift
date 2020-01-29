@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class TimerViewController: UIViewController, UIViewControllerTransitioningDelegate, AVAudioPlayerDelegate {
+class TimerViewController: UIViewController {
 
     //MARK: - variables
     @IBOutlet weak var timerMinutes: UILabel!
@@ -22,27 +22,13 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
     @IBOutlet weak var cat02Image: UIImageView!
     @IBOutlet weak var catVoice: UILabel!
     
+    //カップヌードルかどん兵衛か
+    var noodleMode = "cupnoodle"
     var selectedTime = 1
     var count = 0
-    //3分or5分
-    var noodleMode = "cupnoodle"
     
     let originalAnim = Animation()
     var audioPlayer: AVAudioPlayer!
-    
-    //MARK: - Audio Function
-    func playAudio(name: String, type: String, loopCount: Int) {
-        guard let path = Bundle.main.path(forResource: name, ofType: "." + type) else {return}
-
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
-            audioPlayer.delegate = self
-            audioPlayer.numberOfLoops = loopCount
-            audioPlayer.play()
-        } catch {
-            print(error)
-        }
-    }
     
     //MARK: - Life Cycle
     override func viewDidLoad() {
@@ -64,17 +50,21 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
             return
         }
         
+        //画像の初期値
         steam02Image.isHidden = true
         noodle_openImage.isHidden = true
         cat02Image.isHidden = true
     }
     override func viewDidAppear(_ animated: Bool) {
+        
         startTimer()
         playAudio(name: "cookingBGM", type: "mp3", loopCount: 1)
+        
     }
     
-    //MARK: - Timer Function
+    //MARK: - Functions
     func startTimer() {
+        
         count = selectedTime * 60
         
         Timer.scheduledTimer(timeInterval: 1.0,
@@ -135,7 +125,6 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
             cat01Image.isHidden = false
             cat02Image.isHidden = true
         }
-        
         if count == -1 {
             noodle_Image.isHidden = true
             noodle_openImage.isHidden = false
@@ -147,7 +136,7 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
         if count == 170 {catVoice.text = "待ち遠しいにゃ〜"}
         if count == 120 {catVoice.text = "いま食べたらお腹こわすにゃ"}
         if count == 90 {catVoice.text = "バリカタくらいかにゃ？"}
-        if count == 60 {catVoice.text = "麺かためは大好物にゃ〜"}
+        if count == 60 {catVoice.text = "♫"}
         if count == 20 {catVoice.text = "そろそろカウントダウンするにゃ"}
         if count < 10 {catVoice.text = "\(count + 1)"}
         if count == -1 {catVoice.text = "完成にゃ！"}
@@ -159,22 +148,28 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
         if count == 200 {catVoice.text = "♪"}
         if count == 150 {catVoice.text = "バリカタくらいかにゃ？"}
         if count == 120 {catVoice.text = "♫"}
-        if count == 90 {catVoice.text = "麺かためは大好物にゃ〜"}
+        if count == 90 {catVoice.text = "10分どん兵衛って美味しいのかにゃ？"}
         if count == 20 {catVoice.text = "そろそろカウントダウンするにゃ"}
         if count < 10 {catVoice.text = "\(count + 1)"}
         if count == -1 {catVoice.text = "完成にゃ！"}
+        
     }
     
-    //MARK: - Button Function
+    //MARK: - Event
     @IBAction func backToHome(_ sender: UIButton) {
+        
         //2回戻る
         self.presentingViewController?.dismiss(animated: true, completion: nil)
         self.presentingViewController?.dismiss(animated: true, completion: nil)
         audioPlayer.stop()
+        
     }
     
-    //MARK: - Animation
-    //アニメーション
+}
+
+//MARK: - Animation
+extension TimerViewController: UIViewControllerTransitioningDelegate {
+    
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         originalAnim.isPresenting = true
         originalAnim.moveDirection = "up"
@@ -186,5 +181,23 @@ class TimerViewController: UIViewController, UIViewControllerTransitioningDelega
         originalAnim.moveDirection = "down"
         return originalAnim
     }
+    
+}
 
+//MARK: - Audio
+extension TimerViewController: AVAudioPlayerDelegate {
+    
+    func playAudio(name: String, type: String, loopCount: Int) {
+        guard let path = Bundle.main.path(forResource: name, ofType: "." + type) else {return}
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+            audioPlayer.delegate = self
+            audioPlayer.numberOfLoops = loopCount
+            audioPlayer.play()
+        } catch {
+            print(error)
+        }
+    }
+    
 }

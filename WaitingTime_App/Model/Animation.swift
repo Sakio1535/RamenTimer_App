@@ -9,28 +9,37 @@
 import UIKit
 
 class Animation: NSObject, UIViewControllerAnimatedTransitioning {
-    //遷移方法の判定
-    var isPresenting = true
-    var moveDirection = "right"
-    var durationTime = 0.5
     
+    //MARK: - Variables
+    var isPresenting = true
+    var moveDirection = ""
+    
+    //Delegate Processes
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return durationTime
+        
+        //?
+        return 0.5
+        
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        //isPresentingで分岐
+        
+        //分岐
         if isPresenting {
             presentTransition(transitionContext: transitionContext)
         } else {
             dismissTransition(transitionContext: transitionContext)
         }
+        
     }
     
-    //次の画面に進むアニメーション
+    //MARK: - Functions
+    //画面遷移アニメーション
     func presentTransition(transitionContext: UIViewControllerContextTransitioning) {
+        
         guard let fromView = transitionContext.view(forKey: .from) else {return}
         guard let toView = transitionContext.view(forKey: .to) else {return}
+        
         let containerView = transitionContext.containerView
         //containerViewを遷移先の画面に追加
         containerView.insertSubview(toView, belowSubview: fromView)
@@ -64,11 +73,14 @@ class Animation: NSObject, UIViewControllerAnimatedTransitioning {
                 transitionContext.completeTransition(true)
             }
         }
+        
     }
     //前の画面に戻るアニメーション
     func dismissTransition(transitionContext: UIViewControllerContextTransitioning) {
+        
         guard let fromView = transitionContext.view(forKey: .from) else {return}
         guard let toView = transitionContext.view(forKey: .to) else {return}
+        
         let containerView = transitionContext.containerView
         //containerViewを遷移先の画面に追加
         containerView.insertSubview(toView, belowSubview: fromView)
@@ -102,6 +114,7 @@ class Animation: NSObject, UIViewControllerAnimatedTransitioning {
                 transitionContext.completeTransition(true)
             }
         }
+        
     }
     
 }

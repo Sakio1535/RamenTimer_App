@@ -8,33 +8,49 @@
 
 import UIKit
 
-class ReadyViewController: UIViewController, UIViewControllerTransitioningDelegate {
+class ReadyViewController: UIViewController {
     
+    //MARK: - Variables
     var noodleMode = "cupnoodle"
     
     let originalAnim = Animation()
     
+    //MARK: - LifeCycle
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        //カスタム遷移のデリゲート
+        
         self.transitioningDelegate = self
+        
     }
     
+    //MARK: - Event
     @IBAction func goToNext(_ sender: UIButton) {
+        
         performSegue(withIdentifier: "timer", sender: nil)
+        
     }
     @IBAction func backToHome(_ sender: UIButton) {
+        
         dismiss(animated: true, completion: nil)
+        
     }
     
+    //MARK: - Segue
+    //遷移時にモードの状態を渡す
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "timer" {
             let timerVC = segue.destination as! TimerViewController
             timerVC.noodleMode = noodleMode
         }
+        
     }
+}
+
+//MARK: - Animation
+extension ReadyViewController: UIViewControllerTransitioningDelegate {
     
-    //アニメーション
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         originalAnim.isPresenting = true
         originalAnim.moveDirection = "right"
@@ -46,4 +62,5 @@ class ReadyViewController: UIViewController, UIViewControllerTransitioningDelega
         originalAnim.moveDirection = "left"
         return originalAnim
     }
+    
 }
